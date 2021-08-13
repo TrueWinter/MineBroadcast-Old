@@ -1,0 +1,45 @@
+name: MineBroadcast
+main: dev.truewinter.minebroadcast.MineBroadcast
+version: 1.3.7
+author: TrueWinter
+description: Send messages to staff when players mine blocks. This is a fork of bendem's OreBroadcast
+api-version: 1.17
+
+commands:
+    mb:
+        usage: |
+            MineBroadcast command. Type '/mb help' for more informations
+        description: MineBroadcast commands
+
+permissions:
+    mb.*:
+        description: Give access to all MineBroadcast functionalities
+        default: op
+        children:
+            mb.commands.*: true
+            mb.broadcast: true
+            mb.receive: true
+    mb.commands.*:
+        description: Give access to all the plugin commands
+        default: op
+        children:
+            mb.commands.reload: true
+            mb.commands.clear: true
+    mb.commands.reload:
+        description: Players with this permission can reload the config
+        default: op
+    mb.commands.clear:
+        description: Players with this permission can clear the blacklist
+        default: op
+    mb.commands.optout:
+        description: Players with this permission can opt out from the plugin broadcasts
+        default: op
+    mb.commands.optin:
+        description: Players with this permission can opt in to the plugin broadcasts
+        default: op
+    mb.broadcast:
+        description: Players with this permission will send messages when they mine blocks.
+        default: true
+    mb.receive:
+        description: Players with this permission will receive MineBroadcast messages.
+        default: op

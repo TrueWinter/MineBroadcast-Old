@@ -1,0 +1,14 @@
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+target/
+
+*.bat
+build_log.txt
+*.ai
+*.iml
+.idea/
+out/

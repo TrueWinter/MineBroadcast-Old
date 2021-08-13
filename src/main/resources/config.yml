@@ -1,0 +1,116 @@
+# A list of the blocks which will be broadcasted when found.
+blocks:
+    - coal_ore
+    - iron_ore
+    - gold_ore
+    - lapis_ore
+    - redstone_ore
+    - quartz_ore
+    - diamond_ore
+    - emerald_ore
+    - copper_ore
+    - nether_gold_ore
+    - nether_quartz_ore
+    - ancient_debris
+    - gilded_blackstone
+    - deepslate_copper_ore
+    - deepslate_gold_ore
+    - deepslate_iron_ore
+    - deepslate_coal_ore
+    - deepslate_lapis_ore
+    - deepslate_diamond_ore
+    - deepslate_redstone_ore
+    - deepslate_emerald_ore
+
+# The colors to use to color the block name in the broadcast message.
+# See the end of the file for a list of available colors.
+colors:
+    coal_ore: dark_gray
+    iron_ore: gray
+    gold_ore: yellow
+    lapis_ore: dark_blue
+    redstone_ore: red
+    diamond_ore: aqua
+    emerald_ore: green
+    copper_ore: gold
+    nether_gold_ore: yellow
+    nether_quartz_ore: white
+    ancient_debris: red
+    gilded_blackstone: gold
+    deepslate_coal_ore: dark_gray
+    deepslate_iron_ore: gray
+    deepslate_gold_ore: yellow
+    deepslate_lapis_ore: dark_blue
+    deepslate_redstone_ore: red
+    deepslate_diamond_ore: aqua
+    deepslate_emerald_ore: green
+    deepslate_copper_ore: gold
+
+# The message to be broadcasted (you can use the tags {player_name}, {real_player_name},
+# {count}, {plural}, {block}, {block_color} and {world}).
+# Notes:
+# + You can use colors by using &colorcode (See the end of the file for a list of available color codes).
+# + The {block} tag will be replaced by {block_color}{block}.
+# + The "player_name" tag is the name of the player as it is set by different plugins,
+#   "real_player_name" is the real pseudo of the player.
+message: "&l{player_name}&r just found &l{count}&r block{plural} of [&l&k{block}&r]"
+
+# The text to add when more than one ore is found (Will be used to replace the {plural} tag).
+plural: s
+
+# The ore translations to use in the messages.
+block-translations:
+    coal_ore: coal
+    iron_ore: iron
+    gold_ore: gold
+    lapis_ore: lapis
+    redstone_ore: redstone
+    diamond_ore: diamond
+    emerald_ore: emerald
+    copper_ore: copper
+    nether_gold_ore: nether gold
+    nether_quartz_ore: quartz
+    ancient_debris: ancient debris
+    gilded_blackstone: gilded blackstone
+    deepslate_coal_ore: deepslate coal
+    deepslate_iron_ore: deepslate iron
+    deepslate_gold_ore: deepslate gold
+    deepslate_lapis_ore: deepslate lapis
+    deepslate_redstone_ore: deepslate redstone
+    deepslate_diamond_ore: deepslate diamond
+    deepslate_emerald_ore: deepslate emerald
+    deepslate_copper_ore: deepslate copper
+
+
+# Set this to true to only activate OreBroadcast in listed worlds.
+active-per-worlds: false
+
+# List of worlds where OreBroadcast is active.
+# This has no effect if `active-per-world` is set to false!
+#active-worlds:
+#    - world
+#    - world_nether
+
+# Max size of a vein. If the size is greater, the vein is ignored, preventing server from freezing
+# (i.e. if mining a big structure made of a block to broadcast).
+max-vein-size: 100
+
+# Block placed in creative will be broadcasted when a player not in creative break them.
+broadcast-creative-placed-blocks: true
+
+# Displays the time the block break handler take in the console.
+timing-debug: false
+
+# Colors and color codes available :
+# Use the colors for the ore list and the color codes for the message
+#   black : 0           |     dark_blue : 1
+#   dark_green : 2      |     dark_aqua : 3
+#   dark_red : 4        |     dark_purple : 5
+#   gold : 6            |     gray : 7
+#   dark_gray : 8       |     blue : 9
+#   green : a           |     aqua : b
+#   red : c             |     light_purple : d
+#   yellow : e          |     white : f
+#   magic : k           |     bold : l
+#   strikethrough : m   |     underline : n
+#   italic : o          |     reset : r

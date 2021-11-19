@@ -7,6 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+/**
+ * @author bendem
+ */
 public class BlockPlaceListener implements Listener {
 
     private final MineBroadcast plugin;

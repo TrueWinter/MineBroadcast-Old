@@ -13,6 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.*;
 
+/**
+ * @author bendem
+ * @author TrueWinter
+ */
 public class Config {
     private final MineBroadcast plugin;
     private final Set<SafeBlock> broadcastBlacklist = new HashSet<>();

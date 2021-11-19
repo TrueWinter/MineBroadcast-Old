@@ -18,6 +18,7 @@ import java.util.Map;
  * change block position and retrigger a broadcast
  *
  * @author bendem
+ * @author TrueWinter
  */
 public class PistonListener implements Listener {
 

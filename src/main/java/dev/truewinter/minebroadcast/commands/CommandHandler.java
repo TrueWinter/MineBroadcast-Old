@@ -24,7 +24,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         plugin.getCommand(cmdName).setExecutor(this);
         plugin.getCommand(cmdName).setTabCompleter(this);
 
-        register(new HelpCommand(this));
+        register(new HelpCommand(this, plugin));
     }
 
     public void register(Command cmd) {

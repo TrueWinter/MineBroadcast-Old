@@ -16,6 +16,10 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+/**
+ * @author bendem
+ * @author TrueWinter
+ */
 public class BlockBreakListener implements Listener {
 
     private final MineBroadcast plugin;

@@ -1,6 +1,6 @@
 package dev.truewinter.minebroadcast;
 
-// This plugin is a modified version of bendem's MineBroadcast plugin
+// This plugin is a modified version of bendem's OreBroadcast plugin
 
 import dev.truewinter.minebroadcast.commands.Command;
 import dev.truewinter.minebroadcast.commands.CommandHandler;
@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -163,14 +164,34 @@ public class MineBroadcast extends JavaPlugin {
     }
 
     /**
-     * Checks wether a material should be broadcasted when broken
+     * Checks whether a material should be broadcasted when broken
      *
      * @param material the material to check
      * @return true if breaking a block of that material will trigger a
      *         broadcast
      */
     public boolean isWhitelisted(Material material) {
-        return config.getBlocksToBroadcast().contains(material);
+        return config.getMonitoredBlocks().containsKey(material.name());
+        //return config.getBlocksToBroadcast().contains(material);
+    }
+
+    /**
+     * Returns map of monitored blocks
+     *
+     * @return Returns a map of monitored blocks
+     */
+    public Map<String, MonitoredBlock> getMonitoredBlocks() {
+        return config.getMonitoredBlocks();
+    }
+
+    /**
+     * Returns a monitored block
+     *
+     * @param material the material to get
+     * @return the monitored block
+     */
+    public MonitoredBlock getMonitoredBlock(String material) {
+        return config.getMonitoredBlock(material);
     }
 
     /**

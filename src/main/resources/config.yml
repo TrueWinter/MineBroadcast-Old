@@ -1,50 +1,83 @@
-# A list of the blocks which will be broadcasted when found.
+# A list of the blocks which will be broadcast when found.
+# Example:
+# coal_ore:
+#   color: dark_grey
+#   name: coal
+#
+# Material name and color will be converted to uppercase automatically.
+# If the material name is invalid, it will be skipped.
+# If the color is invalid, it will be reset to white.
+# A warning is sent in console in both cases.
+#
+# The name field is arbitrary. This value will be shown in place of
+# the material name when a block is mined.
+#
+# All fields are required.
+#
+# See the following links for valid options:
+# Material: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# Color: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/ChatColor.html
 blocks:
-    - coal_ore
-    - iron_ore
-    - gold_ore
-    - lapis_ore
-    - redstone_ore
-    - quartz_ore
-    - diamond_ore
-    - emerald_ore
-    - copper_ore
-    - nether_gold_ore
-    - nether_quartz_ore
-    - ancient_debris
-    - gilded_blackstone
-    - deepslate_copper_ore
-    - deepslate_gold_ore
-    - deepslate_iron_ore
-    - deepslate_coal_ore
-    - deepslate_lapis_ore
-    - deepslate_diamond_ore
-    - deepslate_redstone_ore
-    - deepslate_emerald_ore
-
-# The colors to use to color the block name in the broadcast message.
-# See the end of the file for a list of available colors.
-colors:
-    coal_ore: dark_gray
-    iron_ore: gray
-    gold_ore: yellow
-    lapis_ore: dark_blue
-    redstone_ore: red
-    diamond_ore: aqua
-    emerald_ore: green
-    copper_ore: gold
-    nether_gold_ore: yellow
-    nether_quartz_ore: white
-    ancient_debris: red
-    gilded_blackstone: gold
-    deepslate_coal_ore: dark_gray
-    deepslate_iron_ore: gray
-    deepslate_gold_ore: yellow
-    deepslate_lapis_ore: dark_blue
-    deepslate_redstone_ore: red
-    deepslate_diamond_ore: aqua
-    deepslate_emerald_ore: green
-    deepslate_copper_ore: gold
+  coal_ore:
+    color: dark_gray
+    name: coal
+  iron_ore:
+    color: gray
+    name: iron
+  gold_ore:
+    color: yellow
+    name: gold
+  lapis_ore:
+    color: dark_blue
+    name: lapis
+  redstone_ore:
+    color: red
+    name: redstone
+  diamond_ore:
+    color: aqua
+    name: diamond
+  emerald_ore:
+    color: green
+    name: emerald
+  copper_ore:
+    color: gold
+    name: copper
+  nether_gold_ore:
+    color: yellow
+    name: nether gold
+  nether_quartz_ore:
+    color: white
+    name: quartz
+  ancient_debris:
+    color: red
+    name: ancient debris
+  gilded_blackstone:
+    color: gold
+    name: gilded blackstone
+  deepslate_coal_ore:
+    color: dark_gray
+    name: deepslate coal
+  deepslate_iron_ore:
+    color: gray
+    name: deepslate iron
+  deepslate_gold_ore:
+    color: yellow
+    name: deepslate gold
+  deepslate_lapis_ore:
+    color: dark_blue
+    name: deepslate lapis
+  deepslate_redstone_ore:
+    color: red
+    name: deepslate redstone
+  deepslate_diamond_ore:
+    color: aqua
+    name: deepslate diamond
+  deepslate_emerald_ore:
+    color: green
+    name: deepslate emerald
+  deepslate_copper_ore:
+    color: gold
+    name: deepslate copper
 
 # The message to be broadcasted (you can use the tags {player_name}, {real_player_name},
 # {count}, {plural}, {block}, {block_color} and {world}).
@@ -57,30 +90,6 @@ message: "&l{player_name}&r just found &l{count}&r block{plural} of [&l&k{block}
 
 # The text to add when more than one ore is found (Will be used to replace the {plural} tag).
 plural: s
-
-# The ore translations to use in the messages.
-block-translations:
-    coal_ore: coal
-    iron_ore: iron
-    gold_ore: gold
-    lapis_ore: lapis
-    redstone_ore: redstone
-    diamond_ore: diamond
-    emerald_ore: emerald
-    copper_ore: copper
-    nether_gold_ore: nether gold
-    nether_quartz_ore: quartz
-    ancient_debris: ancient debris
-    gilded_blackstone: gilded blackstone
-    deepslate_coal_ore: deepslate coal
-    deepslate_iron_ore: deepslate iron
-    deepslate_gold_ore: deepslate gold
-    deepslate_lapis_ore: deepslate lapis
-    deepslate_redstone_ore: deepslate redstone
-    deepslate_diamond_ore: deepslate diamond
-    deepslate_emerald_ore: deepslate emerald
-    deepslate_copper_ore: deepslate copper
-
 
 # Set this to true to only activate OreBroadcast in listed worlds.
 active-per-worlds: false
@@ -100,17 +109,3 @@ broadcast-creative-placed-blocks: true
 
 # Displays the time the block break handler take in the console.
 timing-debug: false
-
-# Colors and color codes available :
-# Use the colors for the ore list and the color codes for the message
-#   black : 0           |     dark_blue : 1
-#   dark_green : 2      |     dark_aqua : 3
-#   dark_red : 4        |     dark_purple : 5
-#   gold : 6            |     gray : 7
-#   dark_gray : 8       |     blue : 9
-#   green : a           |     aqua : b
-#   red : c             |     light_purple : d
-#   yellow : e          |     white : f
-#   magic : k           |     bold : l
-#   strikethrough : m   |     underline : n
-#   italic : o          |     reset : r

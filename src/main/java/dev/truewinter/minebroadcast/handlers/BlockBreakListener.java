@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class BlockBreakListener implements Listener {
@@ -83,7 +84,8 @@ public class BlockBreakListener implements Listener {
         String blockName;
         blockName = e.getBlockMined().getType().name().toLowerCase();
 
-        String color = plugin.getConfig().getString("colors." + blockName, "white").toUpperCase();
+        //String color = plugin.getConfig().getString("colors." + blockName, "white").toUpperCase();
+        String color = plugin.getMonitoredBlock(blockName.toUpperCase()).getColor().toUpperCase();
         String formattedMessage = format(
             e.getFormat(),
             e.getSource(),
@@ -158,7 +160,7 @@ public class BlockBreakListener implements Listener {
 
     private String translateBlock(String block, String color) {
         return "&" + ChatColor.valueOf(color).getChar()
-            + plugin.getConfig().getString("block-translations." + block, block);
+            + plugin.getMonitoredBlock(block).getName();
     }
 
 }

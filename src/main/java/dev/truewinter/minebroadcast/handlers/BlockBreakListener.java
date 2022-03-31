@@ -43,11 +43,18 @@ public class BlockBreakListener implements Listener {
 
         Block block = event.getBlock();
 
+        plugin.getMiningMonitor().initPlayerMiningStatistics(player);
+        plugin.getMiningMonitor().getPlayerMiningStatistics(player).getMiningTurnMonitor()
+                .setLastBlockPos(block.getX(), block.getY(), block.getZ());
+        plugin.getMiningMonitor().getPlayerMiningStatistics(player).getStatisticsSaver()
+                .addMinedBlock(block);
+
         // Don't broadcast blacklisted blocks
         if(plugin.isBlackListed(block)) {
             plugin.unBlackList(block);
             return;
         }
+
         if(!plugin.isWhitelisted(block.getType())) {
             return;
         }
@@ -100,6 +107,7 @@ public class BlockBreakListener implements Listener {
         );
         broadcast(e.getRecipients(), formattedMessage);
         plugin.getLogger().info(formattedMessage);
+        plugin.getMiningMonitor().addBlockCount(player, block, e.getVein().size());
 
         if(plugin.getConfig().getBoolean("timing-debug", false)) {
             plugin.getLogger().info("Event duration : " + (System.currentTimeMillis() - timer) + "ms");

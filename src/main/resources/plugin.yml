@@ -1,9 +1,9 @@
 name: MineBroadcast
 main: dev.truewinter.minebroadcast.MineBroadcast
-version: 1.3.8
+version: ${project.version}
 author: TrueWinter
 description: Send messages to staff when players mine blocks. This is a fork of bendem's OreBroadcast
-api-version: 1.17
+api-version: 1.18
 
 commands:
     mb:
@@ -36,6 +36,18 @@ permissions:
         default: op
     mb.commands.optin:
         description: Players with this permission can opt in to the plugin broadcasts
+        default: op
+    mb.commands.statistics:
+        description: Get mining statistics for a player
+        default: op
+    mb.commands.startstats:
+        description: Starts the StatisticsSaver for a player. Use the StatisticsSaver only when needed.
+        default: op
+    mb.commands.stopstats:
+        description: Stops the StatisticsSaver for a player
+        default: op
+    mb.commands.resetplayer:
+        description: Resets PlayerMiningStatistics/MiningMonitor for this player
         default: op
     mb.broadcast:
         description: Players with this permission will send messages when they mine blocks.

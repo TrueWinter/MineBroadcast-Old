@@ -7,6 +7,7 @@ import dev.truewinter.minebroadcast.commands.CommandHandler;
 import dev.truewinter.minebroadcast.handlers.BlockBreakListener;
 import dev.truewinter.minebroadcast.handlers.BlockPlaceListener;
 import dev.truewinter.minebroadcast.handlers.PistonListener;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,6 +17,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +35,13 @@ import java.util.UUID;
 public class MineBroadcast extends JavaPlugin {
 
     private Config config;
+    private MiningMonitor miningMonitor;
 
     @Override
     public void onEnable() {
         config = new Config(this);
         config.loadConfig();
+        miningMonitor = new MiningMonitor(this, config.getMonitoredBlocks());
 
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
@@ -90,6 +97,187 @@ public class MineBroadcast extends JavaPlugin {
                 }
             }
         });
+
+        commandHandler.register(new Command("statistics", "Get mining statistics for a player", "mb.command.statistics") {
+            @Override
+            public void execute(CommandSender sender, List<String> args) {
+                if (args.size() != 1) {
+                    sender.sendMessage(ChatColor.RED + "Player name is required.");
+                    return;
+                }
+
+                Player p = Bukkit.getPlayer(args.get(0));
+
+                if (p == null) {
+                    sender.sendMessage(ChatColor.YELLOW + "Unable to find that player. Are they online?");
+                    return;
+                }
+
+                PlayerMiningStatistics playerMiningStatistics = miningMonitor.getPlayerMiningStatistics(p);
+                String time = formatTime((int) Duration.between(miningMonitor.getLastReset(), LocalDateTime.now()).getSeconds());
+                String message = p.getDisplayName() + " has found the following in the past " + time +": \n";
+
+                if (playerMiningStatistics == null) {
+                    sender.sendMessage(p.getDisplayName() + " has not found any monitored blocks in the past " + time);
+                    return;
+                }
+
+                Map<String, Integer> miningCounts = playerMiningStatistics.getBlockCounts();
+
+                if (miningCounts.size() == 0) {
+                    sender.sendMessage(p.getDisplayName() + " has not found any monitored blocks in the past " + time);
+                    return;
+                }
+
+                for (String key : miningCounts.keySet()) {
+                    message += key + ": " + miningCounts.get(key) + " blocks\n";
+                }
+
+                sender.sendMessage(message.trim());
+            }
+        });
+
+        commandHandler.register(new Command("startstats", "Starts the StatisticsSaver for a player. Use the StatisticsSaver only when needed.", "mb.commands.startstats") {
+            @Override
+            public void execute(CommandSender sender, List<String> args) {
+                if(!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.RED + "Only players can use this command");
+                    return;
+                }
+
+                Player player = null;
+
+                if (args.size() == 1) {
+                    Player p = Bukkit.getPlayer(args.get(0));
+                    if (p != null) {
+                        player = p;
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.YELLOW + "No player specified (or invalid command syntax). Assuming self-monitor");
+                    player = (Player) sender;
+                }
+
+                if (player == null) {
+                    sender.sendMessage(ChatColor.YELLOW + "Unable to find that player. Are they online?");
+                    return;
+                }
+
+                getMiningMonitor().initPlayerMiningStatistics(player);
+                StatisticsSaver s = getMiningMonitor().getPlayerMiningStatistics(player).getStatisticsSaver();
+
+                if (s.isActivated()) {
+                    sender.sendMessage(ChatColor.YELLOW + "The StatisticsSaver is already active for that player");
+                    return;
+                }
+
+                s.setActivated(true);
+                sender.sendMessage(ChatColor.GREEN + "Now logging all mined blocks for that player. " + ChatColor.RED + "Do not run this for longer than needed.");
+            }
+        });
+
+        commandHandler.register(new Command("stopstats", "Stops the StatisticsSaver for a player", "mb.commands.stopstats") {
+            @Override
+            public void execute(CommandSender sender, List<String> args) {
+                if(!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.RED + "Only players can use this command");
+                    return;
+                }
+
+                Player player = null;
+
+                if (args.size() == 1) {
+                    Player p = Bukkit.getPlayer(args.get(0));
+                    if (p != null) {
+                        player = p;
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.YELLOW + "No player specified (or invalid command syntax). Assuming self-monitor");
+                    player = (Player) sender;
+                }
+
+                if (player == null) {
+                    sender.sendMessage(ChatColor.YELLOW + "Unable to find that player. Are they online?");
+                    return;
+                }
+
+                getMiningMonitor().initPlayerMiningStatistics(player);
+                StatisticsSaver s = getMiningMonitor().getPlayerMiningStatistics(player).getStatisticsSaver();
+
+                if (!s.isActivated()) {
+                    sender.sendMessage(ChatColor.YELLOW + "The StatisticsSaver is not active for that player");
+                    return;
+                }
+
+                s.setActivated(false);
+                sender.sendMessage(ChatColor.GREEN + "Stopped logging mined blocks for that player, saving results to file");
+
+                if (!s.hasData()) {
+                    sender.sendMessage(ChatColor.YELLOW + "No data to save");
+                    s.reset();
+                    return;
+                }
+
+                LocalDateTime time = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+                String fileName = s.getPlayer().getUniqueId() + "-" + time.format(formatter) + ".txt";
+                File file = new File(getDataFolder(), fileName);
+
+                s.save(file);
+            }
+        });
+
+        commandHandler.register(new Command("resetplayer", "Resets PlayerMiningStatistics/MiningMonitor for this player", "mb.commands.resetplayer") {
+            @Override
+            public void execute(CommandSender sender, List<String> args) {
+                if(!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.RED + "Only players can use this command");
+                    return;
+                }
+
+                Player player = null;
+
+                if (args.size() == 1) {
+                    Player p = Bukkit.getPlayer(args.get(0));
+                    if (p != null) {
+                        player = p;
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.YELLOW + "No player specified (or invalid command syntax)");
+                    return;
+                }
+
+                if (player == null) {
+                    sender.sendMessage(ChatColor.YELLOW + "Unable to find that player. Are they online?");
+                    return;
+                }
+
+                getMiningMonitor().initPlayerMiningStatistics(player);
+                getMiningMonitor().getPlayerMiningStatistics(player).getMiningTurnMonitor().resetTurnMonitor();
+                getMiningMonitor().getPlayerMiningStatistics(player).reset();
+                sender.sendMessage(ChatColor.GREEN + "Reset PlayerMiningStatistics/MiningMonitor for that player");
+            }
+        });
+    }
+
+    public String formatTime(int seconds) {
+        int _minutes = (int) Math.floor(seconds / 60);
+        int _seconds = seconds - (_minutes * 60);
+        String output = "";
+
+        if (_minutes != 0) {
+            output += _minutes + (_minutes == 1 ? " minute " : " minutes ");
+        }
+
+        if (_seconds != 0) {
+            output += _seconds + (_seconds == 1 ? " second" : " seconds");
+        }
+
+        return output.trim();
+    }
+
+    @Override
+    public void onDisable() {
+        miningMonitor.cancelTimer();
     }
 
     /* package */ File getJar() {
@@ -214,4 +402,12 @@ public class MineBroadcast extends JavaPlugin {
         return !config.isWorldWhitelistActive() || config.getWorldWhitelist().contains(world);
     }
 
+    /**
+     * Returns the mining monitor
+     *
+     * @return the mining monitor
+     */
+    public MiningMonitor getMiningMonitor() {
+        return miningMonitor;
+    }
 }

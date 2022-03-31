@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +21,7 @@ import java.util.Map;
  * @author bendem
  * @author TrueWinter
  */
+// TODO: Look into this further and determine whether it's actually needed
 public class PistonListener implements Listener {
 
     private final MineBroadcast plugin;
@@ -39,7 +41,10 @@ public class PistonListener implements Listener {
         pistonUtil.retract(e.getBlock());
         // Workaround end
 
-        Block blockMoving = e.getRetractLocation().getBlock();
+        List<Block> blocksMoving = e.getBlocks();
+        if (blocksMoving.size() == 0) return;
+
+        Block blockMoving = blocksMoving.get(0);
         if(!e.isSticky() || !plugin.isWhitelisted(blockMoving.getType()) || !plugin.isWorldWhitelisted(e.getBlock().getWorld())) {
             return;
         }

@@ -66,7 +66,15 @@ public class Config {
                 continue;
             }
 
-            MonitoredBlock m = new MonitoredBlock(material, color.toUpperCase(), name);
+            boolean counting = plugin.getConfig().getBoolean("blocks." + key + ".counting");
+            int alertAfter = plugin.getConfig().getInt("blocks." + key + ".alertAfter");
+
+            if (alertAfter < 1) {
+                counting = false;
+                plugin.getLogger().warning("Disabled counting for " + key + " as alertAfter value was less than 1");
+            }
+
+            MonitoredBlock m = new MonitoredBlock(material, color.toUpperCase(), name, counting, alertAfter);
             monitoredBlocks.put(key.toUpperCase(), m);
         }
 

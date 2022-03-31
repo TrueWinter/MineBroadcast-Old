@@ -3,8 +3,11 @@
 # coal_ore:
 #   color: dark_grey
 #   name: coal
+#   counting: true
+#   alertAfter: 100
 #
-# Material name and color will be converted to uppercase automatically.
+# Material name ("coal_ore" in the above example)
+# and color will be converted to uppercase automatically.
 # If the material name is invalid, it will be skipped.
 # If the color is invalid, it will be reset to white.
 # A warning is sent in console in both cases.
@@ -12,7 +15,19 @@
 # The name field is arbitrary. This value will be shown in place of
 # the material name when a block is mined.
 #
-# All fields are required.
+# Counting and alertAfter options are part of the experimental MiningMonitor.
+# If the counting option is true (and the alertAfter option is valid),
+# the MiningMonitor will keep track of blocks mined and send alerts if a player
+# mines more than the alertAfter value over a 5 minute period. These alerts will
+# include the time since the 5 minute timer was last reset. Note that the 5 minute
+# timer currently applies for the whole server, not per player.
+#
+# IMPORTANT: All alertAfter values default to 100. Therefore, if you want to use
+# this feature, you must replace these with your own numbers (calculating the
+# average blocks over a 5 minute period). In the future, I may research this further
+# and add better default values.
+#
+# All fields are required. Disabling a feature may require a server restart to be effective.
 #
 # See the following links for valid options:
 # Material: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
@@ -21,63 +36,103 @@ blocks:
   coal_ore:
     color: dark_gray
     name: coal
+    counting: true
+    alertAfter: 100
   iron_ore:
     color: gray
     name: iron
+    counting: true
+    alertAfter: 100
   gold_ore:
     color: yellow
     name: gold
+    counting: true
+    alertAfter: 100
   lapis_ore:
     color: dark_blue
     name: lapis
+    counting: true
+    alertAfter: 100
   redstone_ore:
     color: red
     name: redstone
+    counting: true
+    alertAfter: 100
   diamond_ore:
     color: aqua
     name: diamond
+    counting: true
+    alertAfter: 100
   emerald_ore:
     color: green
     name: emerald
+    counting: true
+    alertAfter: 100
   copper_ore:
     color: gold
     name: copper
+    counting: true
+    alertAfter: 100
   nether_gold_ore:
     color: yellow
     name: nether gold
+    counting: true
+    alertAfter: 100
   nether_quartz_ore:
     color: white
     name: quartz
+    counting: true
+    alertAfter: 100
   ancient_debris:
     color: red
     name: ancient debris
+    counting: true
+    alertAfter: 100
   gilded_blackstone:
     color: gold
     name: gilded blackstone
+    counting: true
+    alertAfter: 100
   deepslate_coal_ore:
     color: dark_gray
     name: deepslate coal
+    counting: true
+    alertAfter: 100
   deepslate_iron_ore:
     color: gray
     name: deepslate iron
+    counting: true
+    alertAfter: 100
   deepslate_gold_ore:
     color: yellow
     name: deepslate gold
+    counting: true
+    alertAfter: 100
   deepslate_lapis_ore:
     color: dark_blue
     name: deepslate lapis
+    counting: true
+    alertAfter: 100
   deepslate_redstone_ore:
     color: red
     name: deepslate redstone
+    counting: true
+    alertAfter: 100
   deepslate_diamond_ore:
     color: aqua
     name: deepslate diamond
+    counting: true
+    alertAfter: 100
   deepslate_emerald_ore:
     color: green
     name: deepslate emerald
+    counting: true
+    alertAfter: 100
   deepslate_copper_ore:
     color: gold
     name: deepslate copper
+    counting: true
+    alertAfter: 100
 
 # The message to be broadcasted (you can use the tags {player_name}, {real_player_name},
 # {count}, {plural}, {block}, {block_color} and {world}).
@@ -88,13 +143,24 @@ blocks:
 #   "real_player_name" is the real pseudo of the player.
 message: "&l{player_name}&r just found &l{count}&r block{plural} of [&l&k{block}&r]"
 
+# This message will be sent if a player finds more than the configured alertAfter value within 5 minutes
+# Tags are the same as the message option above, with the addition of {time} which will be replaced with
+# the difference between the current time, and the last time the timer was reset
+alertMessage: "&l{player_name}&r has found &l{count}&r block{plural} of [&l&k{block}&r] in the past {time}"
+
+# If a user mines in a certain direction for at least 10 blocks, then changes mining direction and finds a
+# monitored block within 25 blocks, and does this 3 times, this alert will be sent.
+# Available tags: {player_name}, {real_player_name}, {world}
+suspiciousMiningMonitorEnabled: true
+suspiciousMiningAlertMessage: "&l{player_name}&r has found monitored blocks after changing direction while mining 3 times"
+
 # The text to add when more than one ore is found (Will be used to replace the {plural} tag).
 plural: s
 
-# Set this to true to only activate OreBroadcast in listed worlds.
+# Set this to true to only activate MineBroadcast in listed worlds.
 active-per-worlds: false
 
-# List of worlds where OreBroadcast is active.
+# List of worlds where MineBroadcast is active.
 # This has no effect if `active-per-world` is set to false!
 #active-worlds:
 #    - world

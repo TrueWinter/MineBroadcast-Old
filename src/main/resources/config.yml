@@ -148,7 +148,7 @@ message: "&l{player_name}&r just found &l{count}&r block{plural} of [&l&k{block}
 # the difference between the current time, and the last time the timer was reset
 alertMessage: "&l{player_name}&r has found &l{count}&r block{plural} of [&l&k{block}&r] in the past {time}"
 
-# If a user mines in a certain direction for at least 10 blocks, then changes mining direction and finds a
+# If a user mines in a certain direction for at least 5 blocks, then changes mining direction and finds a
 # monitored block within 25 blocks, and does this 3 times, this alert will be sent.
 # Available tags: {player_name}, {real_player_name}, {world}
 suspiciousMiningMonitorEnabled: true

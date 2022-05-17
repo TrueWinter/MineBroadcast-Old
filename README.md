@@ -2,6 +2,8 @@
 
 A fork of [OreBroadcast](https://github.com/bendem/OreBroadcast).
 
+**This repository is no longer being updated. All work is now done on the new repository at [https://github.com/TrueWinter/MineBroadcast](https://github.com/TrueWinter/MineBroadcast).**
+
 ## Description
 
 Allows server staff to receive messages when certain blocks are broken. These messages are also logged to console.
